@@ -26,7 +26,7 @@ body {
 .wrap {
   width: min(1080px, calc(100% - 40px));
   margin: 0 auto;
-  padding: 48px 0 80px;
+  padding: 48px 0 96px;
 }
 
 .top {
@@ -135,6 +135,26 @@ button.action:hover {
   font-size: 13px;
 }
 
+.credit {
+  position: fixed;
+  right: 20px;
+  bottom: 16px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+  z-index: 2;
+}
+
+.credit a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.credit a:hover {
+  color: #fff;
+}
+
 @media (max-width: 780px) {
   .grid {
     grid-template-columns: repeat(2, 1fr);
@@ -144,5 +164,11 @@ button.action:hover {
   .top {
     flex-direction: column;
     align-items: start;
+  }
+
+  .credit {
+    position: static;
+    text-align: right;
+    padding: 0 20px 24px;
   }
 }

@@ -1,6 +1,6 @@
 # Face Icons
 
-Procedural toy-style faces rendered as iOS-like squircles. Vanilla HTML, CSS, and JavaScript — no build step, no dependencies.
+Procedural toy-style faces rendered as iOS-like squircles. A design exploration for [sovnik.com](https://sovnik.com). Vanilla HTML, CSS, and JavaScript — no build step, no dependencies.
 
 Open `index.html` locally or deploy the folder as a static site (Netlify, GitHub Pages, any static host).
 

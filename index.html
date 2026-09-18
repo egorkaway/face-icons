@@ -14,14 +14,20 @@
       <header class="top">
         <div>
           <h1>Face Icons</h1>
-          <p class="lede">Procedural squircles in a toy-icon style. Click a face to reroll it.</p>
+          <p class="lede">Procedural toy-style avatar icons. Click a face to reroll it.</p>
         </div>
         <div class="actions">
+          <div class="filter-group" id="filter-group" role="tablist" aria-label="Avatar Filter">
+            <button class="filter-btn active" data-filter="all" type="button">All</button>
+            <button class="filter-btn" data-filter="human" type="button">Humans</button>
+            <button class="filter-btn" data-filter="creature" type="button">Creatures</button>
+            <button class="filter-btn" data-filter="vehicle" type="button">Vehicles</button>
+          </div>
           <button class="action" id="shuffle" type="button">Shuffle all</button>
         </div>
       </header>
       <section class="grid" id="grid" aria-label="Generated faces"></section>
-      <p class="hint">Click a face to reroll it. Use Download PNG for a 1024px file. Press R or Space to shuffle.</p>
+      <p class="hint">Click a face to reroll it. Download PNG for a high-res 1024px file or SVG for vector. Press R or Space to shuffle.</p>
     </main>
     <p class="credit">
       A design exploration for

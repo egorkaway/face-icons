@@ -1,16 +1,27 @@
 const COUNT = 12;
 const grid = document.getElementById("grid");
 const shuffleBtn = document.getElementById("shuffle");
+const filterGroup = document.getElementById("filter-group");
 
+let currentFilter = "all";
 let seeds = Array.from({ length: COUNT }, () => FaceIcons.randomSeed());
 
+function getForcedKind() {
+  return currentFilter === "all" ? null : currentFilter;
+}
+
 function cardHTML(seed, index) {
+  const forcedKind = getForcedKind();
+  const face = FaceIcons.generateFace(seed, forcedKind);
   return `
     <article class="card">
-      <button class="face" data-index="${index}" title="Click to reroll · seed ${seed}" aria-label="Random face ${index + 1}">
-        ${FaceIcons.faceSVG(seed)}
+      <button class="face" data-index="${index}" title="Click to reroll · ${face.kind} · seed ${seed}" aria-label="Random face ${index + 1}">
+        ${FaceIcons.renderFace(face)}
       </button>
-      <button class="download" type="button" data-index="${index}">Download PNG</button>
+      <div class="card-actions">
+        <button class="download-btn" type="button" data-action="png" data-index="${index}">PNG</button>
+        <button class="download-btn" type="button" data-action="svg" data-index="${index}">SVG</button>
+      </div>
     </article>
   `;
 }
@@ -31,10 +42,29 @@ function shuffle() {
   render();
 }
 
+if (filterGroup) {
+  filterGroup.addEventListener("click", (event) => {
+    const btn = event.target.closest(".filter-btn");
+    if (!btn) return;
+    filterGroup.querySelectorAll(".filter-btn").forEach((b) => b.classList.remove("active"));
+    btn.classList.add("active");
+    currentFilter = btn.dataset.filter;
+    render();
+  });
+}
+
 grid.addEventListener("click", (event) => {
-  const download = event.target.closest(".download");
+  const download = event.target.closest(".download-btn");
   if (download) {
-    downloadFace(seeds[Number(download.dataset.index)]);
+    const index = Number(download.dataset.index);
+    const action = download.dataset.action;
+    const seed = seeds[index];
+    const forcedKind = getForcedKind();
+    if (action === "svg") {
+      downloadFaceSVG(seed, forcedKind);
+    } else {
+      downloadFacePNG(seed, forcedKind);
+    }
     return;
   }
   const face = event.target.closest(".face");
@@ -52,8 +82,19 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
-function downloadFace(seed) {
-  const svg = FaceIcons.faceSVG(seed);
+function downloadFaceSVG(seed, forcedKind) {
+  const svg = FaceIcons.faceSVG(seed, forcedKind);
+  const blob = new Blob([svg], { type: "image/svg+xml;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `face-${seed}.svg`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function downloadFacePNG(seed, forcedKind) {
+  const svg = FaceIcons.faceSVG(seed, forcedKind);
   const blob = new Blob([svg], { type: "image/svg+xml;charset=utf-8" });
   const url = URL.createObjectURL(blob);
   const img = new Image();
@@ -76,3 +117,4 @@ function downloadFace(seed) {
 }
 
 render();
+

@@ -1,9 +1,12 @@
 :root {
   color-scheme: dark;
-  --bg: #000;
+  --bg: #0b0c10;
+  --card-bg: #14161d;
   --ink: #f4f1ea;
-  --muted: #8a867c;
-  --line: #1c1c1c;
+  --muted: #8a8d9b;
+  --line: #222530;
+  --accent: #6c5ce7;
+  --accent-hover: #5b4cdb;
 }
 
 * {
@@ -17,6 +20,7 @@ body {
   background: var(--bg);
   color: var(--ink);
   font-family: Outfit, "Avenir Next", "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
 body {
@@ -24,23 +28,27 @@ body {
 }
 
 .wrap {
-  width: min(1080px, calc(100% - 40px));
+  width: min(1120px, calc(100% - 48px));
   margin: 0 auto;
-  padding: 48px 0 96px;
+  padding: 56px 0 96px;
 }
 
 .top {
   display: flex;
-  align-items: end;
+  align-items: flex-end;
   justify-content: space-between;
   gap: 24px;
-  margin-bottom: 48px;
+  margin-bottom: 40px;
 }
 
 h1 {
   margin: 0 0 8px;
-  font-size: 32px;
+  font-size: 34px;
+  font-weight: 700;
   letter-spacing: -0.04em;
+  background: linear-gradient(135deg, #ffffff 40%, #a29bfe 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .lede {
@@ -51,37 +59,87 @@ h1 {
 
 .actions {
   display: flex;
-  gap: 10px;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  display: flex;
+  background: #15171e;
+  padding: 4px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  gap: 2px;
+}
+
+.filter-btn {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.filter-btn:hover {
+  color: var(--ink);
+}
+
+.filter-btn.active {
+  background: var(--accent);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(108, 92, 231, 0.4);
 }
 
 button.action {
   appearance: none;
   border: 1px solid var(--line);
-  background: #111;
+  background: #171922;
   color: var(--ink);
   border-radius: 999px;
-  padding: 10px 16px;
+  padding: 9px 18px;
   font: inherit;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
+  transition: all 0.18s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
 button.action:hover {
-  background: #1a1a1a;
+  background: #202330;
+  border-color: #33384a;
+  transform: translateY(-1px);
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 48px 36px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 36px 28px;
 }
 
 .card {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
+  background: var(--card-bg);
+  padding: 20px 18px 16px;
+  border-radius: 36px;
+  border: 1px solid var(--line);
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s ease, border-color 0.22s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  border-color: #33384c;
+  box-shadow: 0 16px 32px -8px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
 .face {
@@ -94,55 +152,81 @@ button.action:hover {
   line-height: 0;
   position: relative;
   width: 100%;
+  max-width: 180px;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.35));
 }
 
 .face svg {
   width: 100%;
   height: auto;
   display: block;
+  border-radius: 28%;
 }
 
 .face:hover {
-  transform: translateY(-2px);
+  transform: scale(1.03);
+}
+
+.face:active {
+  transform: scale(0.97);
 }
 
 .face:focus-visible,
-.download:focus-visible {
-  outline: 2px solid #fff;
-  outline-offset: 4px;
+.download-btn:focus-visible,
+button.action:focus-visible,
+.filter-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
 }
 
-.download {
+.card-actions {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  justify-content: center;
+}
+
+.download-btn {
   appearance: none;
   border: 1px solid var(--line);
-  background: #111;
-  color: var(--ink);
+  background: #1a1c26;
+  color: var(--muted);
   border-radius: 999px;
-  padding: 8px 14px;
+  padding: 6px 12px;
   font: inherit;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
+  letter-spacing: 0.02em;
   cursor: pointer;
+  transition: all 0.15s ease;
 }
 
-.download:hover {
-  background: #1a1a1a;
+.download-btn:hover {
+  background: #242736;
+  color: #ffffff;
+  border-color: #3e445b;
 }
 
 .hint {
-  margin-top: 40px;
+  margin-top: 48px;
   color: var(--muted);
   font-size: 13px;
+  text-align: center;
 }
 
 .credit {
   position: fixed;
-  left: 20px;
-  bottom: 16px;
+  left: 24px;
+  bottom: 18px;
   margin: 0;
   color: var(--muted);
   font-size: 12px;
   z-index: 2;
+  background: rgba(11, 12, 16, 0.7);
+  padding: 4px 8px;
+  border-radius: 6px;
+  backdrop-filter: blur(8px);
 }
 
 .credit a {
@@ -155,14 +239,35 @@ button.action:hover {
   color: #fff;
 }
 
-@media (max-width: 780px) {
+@media (max-width: 960px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+}
+
+@media (max-width: 680px) {
   .grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 28px;
+    gap: 20px;
   }
 
   .top {
     flex-direction: column;
-    align-items: start;
+    align-items: flex-start;
+  }
+
+  .actions {
+    width: 100%;
+    justify-content: space-between;
   }
 }
+
+@media (max-width: 440px) {
+  .grid {
+    grid-template-columns: 1fr;
+    max-width: 240px;
+    margin: 0 auto;
+  }
+}
+

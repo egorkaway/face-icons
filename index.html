@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Face Icons</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="wrap">
+      <header class="top">
+        <div>
+          <h1>Face Icons</h1>
+          <p class="lede">Procedural squircles in a toy-icon style. Click a face to reroll it.</p>
+        </div>
+        <div class="actions">
+          <button class="action" id="shuffle" type="button">Shuffle all</button>
+        </div>
+      </header>
+      <section class="grid" id="grid" aria-label="Generated faces"></section>
+      <p class="hint">Click a face to reroll it. Use Download PNG for a 1024px file. Press R or Space to shuffle.</p>
+    </main>
+    <script src="faces.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

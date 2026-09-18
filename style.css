@@ -137,7 +137,7 @@ button.action:hover {
 
 .credit {
   position: fixed;
-  right: 20px;
+  left: 20px;
   bottom: 16px;
   margin: 0;
   color: var(--muted);
@@ -164,11 +164,5 @@ button.action:hover {
   .top {
     flex-direction: column;
     align-items: start;
-  }
-
-  .credit {
-    position: static;
-    text-align: right;
-    padding: 0 20px 24px;
   }
 }

@@ -200,16 +200,13 @@ function applyVehicleContrast(spec) {
 function genHuman(rng, seed) {
   const palette = pick(rng, HUMAN_PALETTES);
   const hair = weighted(rng, [
-    ["bangs", 0.15],
-    ["afro", 0.14],
-    ["pompadour", 0.14],
-    ["wavy-bob", 0.13],
-    ["beanie", 0.10],
-    ["cap", 0.08],
-    ["headband", 0.08],
-    ["topknot", 0.08],
-    ["spiky", 0.05],
-    ["bald", 0.05],
+    ["bangs", 0.20],
+    ["afro", 0.19],
+    ["pompadour", 0.18],
+    ["wavy-bob", 0.17],
+    ["topknot", 0.12],
+    ["spiky", 0.08],
+    ["bald", 0.06],
   ]);
 
   const eyes = weighted(rng, [
@@ -281,7 +278,6 @@ function genHuman(rng, seed) {
     ...palette,
     hair,
     hairColor: palette.hair,
-    hatColor: pick(rng, [palette.shirt, "#2D3436", "#E17055", "#6C5CE7", "#0984E3", "#FD79A8"]),
     eyes,
     eyeSize: range(rng, 0.9, 1.15),
     eyeGap: range(rng, 0.95, 1.1),
@@ -717,71 +713,6 @@ function drawHair(spec) {
       tag("circle", { cx: 100, cy: 12, r: 24, fill: color }),
       tag("circle", { cx: 100, cy: 12, r: 24, fill: "rgba(0,0,0,0.1)" }),
       tag("ellipse", { cx: 100, cy: 26, rx: 78, ry: 26, fill: color }),
-    ].join("");
-  }
-
-  if (style === "beanie") {
-    const hat = spec.hatColor;
-    return [
-      // Beanie dome
-      tag("path", {
-        d: "M 24 64 C 24 8 176 8 176 64 Z",
-        fill: hat,
-      }),
-      // Folded brim
-      tag("rect", { x: 18, y: 50, width: 164, height: 22, rx: 8, fill: hat }),
-      tag("rect", { x: 18, y: 50, width: 164, height: 22, rx: 8, fill: "rgba(0,0,0,0.15)" }),
-      // Beanie rib lines
-      tag("path", {
-        d: "M 60 52 V 70 M 100 52 V 70 M 140 52 V 70",
-        stroke: "rgba(255,255,255,0.25)",
-        "stroke-width": "2",
-      }),
-      // Top pom-pom
-      tag("circle", { cx: 100, cy: 10, r: 12, fill: hat }),
-      tag("circle", { cx: 100, cy: 10, r: 12, fill: "rgba(255,255,255,0.15)" }),
-    ].join("");
-  }
-
-  if (style === "cap") {
-    const cap = spec.hatColor;
-    return [
-      // Cap crown
-      tag("path", { d: "M 32 58 C 32 16 168 16 168 58 Z", fill: cap }),
-      // Cap visor / brim
-      tag("path", {
-        d: "M 20 54 Q 100 68 180 54 Q 100 80 20 54 Z",
-        fill: cap,
-      }),
-      tag("path", {
-        d: "M 20 54 Q 100 68 180 54 Q 100 80 20 54 Z",
-        fill: "rgba(0,0,0,0.15)",
-      }),
-      // Button on top
-      tag("circle", { cx: 100, cy: 16, r: 4.5, fill: "rgba(255,255,255,0.3)" }),
-    ].join("");
-  }
-
-  if (style === "headband") {
-    const band = spec.hatColor;
-    return [
-      // Base hair
-      tag("ellipse", { cx: 100, cy: 20, rx: 84, ry: 32, fill: color }),
-      // Band
-      tag("path", {
-        d: "M 16 48 Q 100 62 184 48",
-        stroke: band,
-        "stroke-width": "14",
-        "stroke-linecap": "round",
-        fill: "none",
-      }),
-      // Stripe on band
-      tag("path", {
-        d: "M 24 48 Q 100 62 176 48",
-        stroke: "#FFFFFF",
-        "stroke-width": "3",
-        fill: "none",
-      }),
     ].join("");
   }
 
@@ -1584,4 +1515,3 @@ if (typeof window !== "undefined") {
 if (typeof module !== "undefined") {
   module.exports = { generateFace, renderFace, faceSVG, randomSeed };
 }
-

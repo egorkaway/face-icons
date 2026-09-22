@@ -35,7 +35,7 @@ This repo is already a static site. In the Netlify UI:
 Each face is a seeded SVG with tactile vinyl/toy shading and subtle rim highlights. The generator mixes:
 
 - **Characters & Tones:** Humans with varied skin tones, fantasy creatures, and retro vehicles/buses
-- **Hairstyles & Headwear:** Bangs, afro puffs, pompadour swoops, wavy bobs, beanies, caps, headbands, topknots, spiky hair, and shiny bald heads
+- **Hairstyles:** Bangs, afro puffs, pompadour swoops, wavy bobs, topknots, spiky hair, and shiny bald heads
 - **Facial Expressions:** Eyebrows (neutral, arched, happy, curious, furrowed), eyes (glossy catchlights, anime sparkles, winks, happy squints, sleepy lids)
 - **Mouths:** Joyous open smiles with teeth & tongue, laughing mouths, playful tongue-out (`:P`), confident smirks, kawaii cat mouths, and whistles
 - **Clothing & Collars:** Crewneck sweaters, hoodies with drawstrings, ribbed turtlenecks, and polo collars
@@ -50,4 +50,3 @@ Core files:
 - `style.css` — dark tactile UI layout and cards
 - `faces.js` — procedural SVG generator
 - `app.js` — interactive grid, filtering, and PNG/SVG export
-

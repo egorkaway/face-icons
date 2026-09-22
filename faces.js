@@ -368,12 +368,20 @@ function genVehicle(rng, seed) {
     ["car", 0.30],
     ["truck", 0.25],
   ]);
-
+// Vehicle flag generation (mirrors human logic)
+  let flags = null;
+  if (chance(rng, 0.32)) {
+    const left = pick(rng, FLAG_IDS);
+    const right = chance(rng, 0.5) ? left : pick(rng, FLAG_IDS.filter(id => id !== left));
+    flags = { left, right };
+  }
   return {
     kind: "vehicle",
     seed,
     ...palette,
     type,
+flags,
+    // original splitY line
     splitY: range(rng, 0.54, 0.60),
     glassPad: range(rng, 0.10, 0.14),
     eyes: pick(rng, ["glossy", "sparkle", "happy", "winks"]),
@@ -537,7 +545,7 @@ function drawEars(spec) {
 function drawClothing(spec) {
   const shirt = spec.shirt;
   const accent = spec.shirtAccent || "#FFFFFF";
-  const style = spec.shirtStyle;
+  const style = spec.shirtStyle; return "";
 
   if (style === "hoodie") {
     return [
@@ -1512,6 +1520,9 @@ function drawVehicle(spec, id) {
 
   // Vehicle cute eyes inside windshield
   parts.push(drawEyes(spec, spec.eyes, spec.eyeInk, 100, eyeY, 1.08, spec.eyeSize));
+  if (spec.flags) {
+    parts.push(drawFlagCheeks(spec, id));
+  }
 
   // Headlights
   if (spec.hasLights) {

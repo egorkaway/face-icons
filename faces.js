@@ -1520,7 +1520,7 @@ function drawVehicle(spec, id) {
 
   // Vehicle cute eyes inside windshield
   parts.push(drawEyes(spec, spec.eyes, spec.eyeInk, 100, eyeY, 1.08, spec.eyeSize));
-  if (spec.flags) {
+  if (spec.flags && !spec.hasLights) {
     parts.push(drawFlagCheeks(spec, id));
   }
 

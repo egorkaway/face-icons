@@ -411,6 +411,7 @@ function genTrain(rng, seed) {
   return {
     kind: "train", seed, ...livery,
     flags: hasFlags ? { left, right: flagChoices.length === 1 || chance(rng, 0.55) ? left : pick(rng, flagChoices.filter((flag) => flag !== left)) } : null,
+    windowStyle: pick(rng, ["panoramic", "rounded", "twin"]),
     eyes: pick(rng, ["glossy", "sparkle", "happy", "winks"]),
     eyeSize: range(rng, 0.9, 1.08),
     glass: "#263A43", light: "#FFF1B8",
@@ -1540,11 +1541,30 @@ function drawTrain(spec, id) {
     tag("path", { d: "M 0 56 Q 0 14 38 8 L 162 8 Q 200 14 200 56 L 200 200 L 0 200 Z", fill: spec.top }),
     tag("path", { d: "M 0 139 Q 100 128 200 139 L 200 200 L 0 200 Z", fill: spec.bottom }),
     tag("path", { d: "M 0 139 Q 100 128 200 139 L 200 151 Q 100 140 0 151 Z", fill: spec.stripe }),
-    // Wide panoramic windscreen, split like a real cab.
-    tag("path", { d: "M 22 34 Q 100 23 178 34 L 169 91 Q 100 98 31 91 Z", fill: spec.glass, stroke: "#17252B", "stroke-width": 5 }),
-    tag("line", { x1: 100, y1: 29, x2: 100, y2: 94, stroke: "#17252B", "stroke-width": 4 }),
   ];
-  parts.push(drawEyes(spec, spec.eyes, "#F7F2E8", 100, 63, 1.18, spec.eyeSize));
+  if (spec.windowStyle === "rounded") {
+    // Broad rounded cab glass, similar to the vehicle windscreen.
+    parts.push(
+      tag("rect", { x: 20, y: 28, width: 160, height: 68, rx: 24, fill: spec.glass, stroke: "#17252B", "stroke-width": 5 }),
+      tag("line", { x1: 100, y1: 31, x2: 100, y2: 93, stroke: "#17252B", "stroke-width": 4 }),
+    );
+    parts.push(drawEyes(spec, spec.eyes, "#F7F2E8", 100, 63, 1.18, spec.eyeSize));
+  } else if (spec.windowStyle === "twin") {
+    // Two distinct angled cab windows with a sturdy center pillar.
+    parts.push(
+      tag("path", { d: "M 25 35 L 94 30 L 94 91 L 34 88 Z", fill: spec.glass, stroke: "#17252B", "stroke-width": 5, "stroke-linejoin": "round" }),
+      tag("path", { d: "M 106 30 L 175 35 L 166 88 L 106 91 Z", fill: spec.glass, stroke: "#17252B", "stroke-width": 5, "stroke-linejoin": "round" }),
+    );
+    parts.push(drawEyes(spec, spec.eyes, "#F7F2E8", 77, 62, 0.76, spec.eyeSize));
+    parts.push(drawEyes(spec, spec.eyes, "#F7F2E8", 123, 62, 0.76, spec.eyeSize));
+  } else {
+    // Wide panoramic windscreen, split like a real cab.
+    parts.push(
+      tag("path", { d: "M 22 34 Q 100 23 178 34 L 169 91 Q 100 98 31 91 Z", fill: spec.glass, stroke: "#17252B", "stroke-width": 5 }),
+      tag("line", { x1: 100, y1: 29, x2: 100, y2: 94, stroke: "#17252B", "stroke-width": 4 }),
+    );
+    parts.push(drawEyes(spec, spec.eyes, "#F7F2E8", 100, 63, 1.18, spec.eyeSize));
+  }
   if (spec.flags) parts.push(drawFlagCheeks(spec, id));
   // CP and Renfe roundels/wordmarks are operator branding, never country flags.
   if (spec.operator === "CP") {

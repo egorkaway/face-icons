@@ -17,7 +17,7 @@ Then open [http://localhost:8766](http://localhost:8766).
 - Click a face to reroll it
 - **Download PNG** saves a 1024×1024 high-res icon
 - **Download SVG** saves the raw scalable vector icon
-- Filter avatars by **All**, **Humans**, **Creatures**, or **Vehicles**
+- Filter avatars by **All**, **Humans**, **Creatures**, **Vehicles**, or **Trains**
 - Press `R` or Space to shuffle the grid
 
 ## Deploy on Netlify
@@ -34,7 +34,7 @@ This repo is already a static site. In the Netlify UI:
 
 Each face is a seeded SVG with tactile vinyl/toy shading and subtle rim highlights. The generator mixes:
 
-- **Characters & Tones:** Humans with varied skin tones, fantasy creatures, and retro vehicles/buses
+- **Characters & Tones:** Humans with varied skin tones, fantasy creatures, retro vehicles/buses, and train fronts inspired by CP, Renfe, Ouigo España, and Iryo services
 - **Hairstyles:** Bangs, afro puffs, pompadour swoops, wavy bobs, topknots, spiky hair, and shiny bald heads
 - **Facial Expressions:** Eyebrows (neutral, arched, happy, curious, furrowed), eyes (glossy catchlights, anime sparkles, winks, happy squints, sleepy lids)
 - **Mouths:** Joyous open smiles with teeth & tongue, laughing mouths, playful tongue-out (`:P`), confident smirks, kawaii cat mouths, and whistles

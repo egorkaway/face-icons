@@ -173,6 +173,7 @@ function generateFace(seed = randomSeed(), forcedKind = null) {
   ]);
 
   if (kind === "vehicle") return applyVehicleContrast(genVehicle(rng, seed));
+  if (kind === "train") return applyVehicleContrast(genTrain(rng, seed));
   if (kind === "creature") return applyCreatureContrast(genCreature(rng, seed));
   return applyHumanContrast(genHuman(rng, seed));
 }
@@ -390,6 +391,31 @@ flags,
   };
 }
 
+function genTrain(rng, seed) {
+  const liveries = [
+    { label: "CP Alfa Pendular · Portugal", operator: "CP", model: "ALFA PENDULAR", top: "#F4F3EE", bottom: "#343C3B", accent: "#B51F2B", glass: "#263A43", stripe: "#B51F2B", badge: "#167347" },
+    { label: "CP 5600 · Portugal", operator: "CP", model: "5600", top: "#F1C82E", bottom: "#17643B", accent: "#17643B", glass: "#263A43", stripe: "#F1C82E", badge: "#17643B" },
+    { label: "CP Intercidades · Portugal", operator: "CP", model: "INTERCIDADES", top: "#F0EEE7", bottom: "#1D6848", accent: "#D92532", glass: "#253945", stripe: "#D92532", badge: "#1D6848" },
+    { label: "Renfe AVE · Spain", operator: "renfe", model: "AVE", top: "#F5F3EF", bottom: "#4A3A59", accent: "#8C1D40", glass: "#263746", stripe: "#8C1D40", badge: "#6F1D46" },
+    { label: "Renfe Cercanías · Spain", operator: "renfe", model: "CERCANÍAS", top: "#EEEDE9", bottom: "#C52836", accent: "#C52836", glass: "#293B45", stripe: "#C52836", badge: "#C52836" },
+    { label: "Renfe Alvia · Spain", operator: "renfe", model: "ALVIA", top: "#F5F3EF", bottom: "#43434B", accent: "#A82042", glass: "#283946", stripe: "#A82042", badge: "#70213B" },
+    { label: "Ouigo España · Spain", operator: "OUIGO", model: "OUIGO", top: "#F6F3ED", bottom: "#244C9A", accent: "#F04D9A", glass: "#263746", stripe: "#ED4B99", badge: "#244C9A" },
+    { label: "Iryo · Spain", operator: "iryo", model: "ETR 1000", top: "#E8E5E0", bottom: "#B42036", accent: "#F07443", glass: "#23272D", stripe: "#E3483F", badge: "#B42036" },
+  ];
+  const livery = pick(rng, liveries);
+  const flagChoices = livery.operator === "CP"
+    ? ["portuguese"]
+    : ["spanish", "catalan", "basque", "galician"];
+  const left = pick(rng, flagChoices);
+  return {
+    kind: "train", seed, ...livery,
+    flags: { left, right: flagChoices.length === 1 || chance(rng, 0.55) ? left : pick(rng, flagChoices.filter((flag) => flag !== left)) },
+    eyes: pick(rng, ["glossy", "sparkle", "happy", "winks"]),
+    eyeSize: range(rng, 0.9, 1.08),
+    glass: "#263A43", light: "#FFF1B8",
+  };
+}
+
 /* =========================================================================
    SVG RENDERING ENGINE
    ========================================================================= */
@@ -402,7 +428,9 @@ function renderFace(spec) {
   const path = superellipsePath(SIZE);
 
   const body =
-    spec.kind === "vehicle"
+    spec.kind === "train"
+      ? drawTrain(spec, id)
+      : spec.kind === "vehicle"
       ? drawVehicle(spec, id)
       : spec.kind === "creature"
         ? drawCreature(spec, id)
@@ -1501,6 +1529,38 @@ function drawVehicle(spec, id) {
     parts.push(tag("rect", { x: 44, y: 184, width: 112, height: 10, rx: 5, fill: spec.bumper }));
   }
 
+  return parts.join("");
+}
+
+function drawTrain(spec, id) {
+  const parts = [
+    tag("rect", { x: 0, y: 0, width: SIZE, height: SIZE, fill: "#DCE7E8" }),
+    // Broad, softly rounded cab front and livery panels.
+    tag("path", { d: "M 0 56 Q 0 14 38 8 L 162 8 Q 200 14 200 56 L 200 200 L 0 200 Z", fill: spec.top }),
+    tag("path", { d: "M 0 139 Q 100 128 200 139 L 200 200 L 0 200 Z", fill: spec.bottom }),
+    tag("path", { d: "M 0 139 Q 100 128 200 139 L 200 151 Q 100 140 0 151 Z", fill: spec.stripe }),
+    // Wide panoramic windscreen, split like a real cab.
+    tag("path", { d: "M 22 34 Q 100 23 178 34 L 169 91 Q 100 98 31 91 Z", fill: spec.glass, stroke: "#17252B", "stroke-width": 5 }),
+    tag("line", { x1: 100, y1: 29, x2: 100, y2: 94, stroke: "#17252B", "stroke-width": 4 }),
+  ];
+  parts.push(drawEyes(spec, spec.eyes, "#F7F2E8", 100, 63, 1.18, spec.eyeSize));
+  parts.push(drawFlagCheeks(spec, id));
+  // CP and Renfe roundels/wordmarks are operator branding, never country flags.
+  if (spec.operator === "CP") {
+    parts.push(tag("circle", { cx: 100, cy: 119, r: 15, fill: spec.badge }));
+    parts.push(tag("text", { x: 100, y: 123, fill: "#FFFFFF", "font-size": 10, "font-family": "Arial, sans-serif", "font-weight": 700, "text-anchor": "middle" }, "CP"));
+  } else if (spec.operator === "renfe") {
+    parts.push(tag("text", { x: 100, y: 123, fill: "#FFFFFF", "font-size": 15, "font-family": "Arial, sans-serif", "font-weight": 700, "font-style": "italic", "text-anchor": "middle" }, "renfe"));
+  } else {
+    parts.push(tag("text", { x: 100, y: 123, fill: "#FFFFFF", "font-size": spec.operator === "OUIGO" ? 10 : 14, "font-family": "Arial, sans-serif", "font-weight": 700, "font-style": "italic", "text-anchor": "middle" }, spec.operator));
+  }
+  parts.push(
+    tag("rect", { x: 20, y: 153, width: 20, height: 10, rx: 5, fill: spec.light, stroke: "#FFFFFF", "stroke-width": 2 }),
+    tag("rect", { x: 160, y: 153, width: 20, height: 10, rx: 5, fill: spec.light, stroke: "#FFFFFF", "stroke-width": 2 }),
+    tag("rect", { x: 57, y: 177, width: 86, height: 8, rx: 4, fill: "#20272A" }),
+    tag("text", { x: 100, y: 174, fill: "#FFFFFF", "font-size": 6, "font-family": "Arial, sans-serif", "font-weight": 700, "letter-spacing": 0.7, "text-anchor": "middle" }, spec.model),
+    tag("line", { x1: 18, y1: 194, x2: 182, y2: 194, stroke: "#20272A", "stroke-width": 6, "stroke-linecap": "round" }),
+  );
   return parts.join("");
 }
 

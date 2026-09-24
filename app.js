@@ -15,9 +15,10 @@ function cardHTML(seed, index) {
   const face = FaceIcons.generateFace(seed, forcedKind);
   return `
     <article class="card">
-      <button class="face" data-index="${index}" title="Click to reroll · ${face.kind} · seed ${seed}" aria-label="Random face ${index + 1}">
+      <button class="face" data-index="${index}" title="Click to reroll · ${face.label || face.kind} · seed ${seed}" aria-label="${face.label || `Random face ${index + 1}`}">
         ${FaceIcons.renderFace(face)}
       </button>
+      ${face.label ? `<p class="card-label">${face.label}</p>` : ""}
       <div class="card-actions">
         <button class="download-btn" type="button" data-action="png" data-index="${index}">PNG</button>
         <button class="download-btn" type="button" data-action="svg" data-index="${index}">SVG</button>
@@ -117,4 +118,3 @@ function downloadFacePNG(seed, forcedKind) {
 }
 
 render();
-

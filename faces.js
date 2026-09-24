@@ -406,10 +406,11 @@ function genTrain(rng, seed) {
   const flagChoices = livery.operator === "CP"
     ? ["portuguese"]
     : ["spanish", "catalan", "basque", "galician"];
-  const left = pick(rng, flagChoices);
+  const hasFlags = chance(rng, 0.2);
+  const left = hasFlags ? pick(rng, flagChoices) : null;
   return {
     kind: "train", seed, ...livery,
-    flags: { left, right: flagChoices.length === 1 || chance(rng, 0.55) ? left : pick(rng, flagChoices.filter((flag) => flag !== left)) },
+    flags: hasFlags ? { left, right: flagChoices.length === 1 || chance(rng, 0.55) ? left : pick(rng, flagChoices.filter((flag) => flag !== left)) } : null,
     eyes: pick(rng, ["glossy", "sparkle", "happy", "winks"]),
     eyeSize: range(rng, 0.9, 1.08),
     glass: "#263A43", light: "#FFF1B8",
@@ -1544,15 +1545,17 @@ function drawTrain(spec, id) {
     tag("line", { x1: 100, y1: 29, x2: 100, y2: 94, stroke: "#17252B", "stroke-width": 4 }),
   ];
   parts.push(drawEyes(spec, spec.eyes, "#F7F2E8", 100, 63, 1.18, spec.eyeSize));
-  parts.push(drawFlagCheeks(spec, id));
+  if (spec.flags) parts.push(drawFlagCheeks(spec, id));
   // CP and Renfe roundels/wordmarks are operator branding, never country flags.
   if (spec.operator === "CP") {
     parts.push(tag("circle", { cx: 100, cy: 119, r: 15, fill: spec.badge }));
     parts.push(tag("text", { x: 100, y: 123, fill: "#FFFFFF", "font-size": 10, "font-family": "Arial, sans-serif", "font-weight": 700, "text-anchor": "middle" }, "CP"));
-  } else if (spec.operator === "renfe") {
-    parts.push(tag("text", { x: 100, y: 123, fill: "#FFFFFF", "font-size": 15, "font-family": "Arial, sans-serif", "font-weight": 700, "font-style": "italic", "text-anchor": "middle" }, "renfe"));
   } else {
-    parts.push(tag("text", { x: 100, y: 123, fill: "#FFFFFF", "font-size": spec.operator === "OUIGO" ? 10 : 14, "font-family": "Arial, sans-serif", "font-weight": 700, "font-style": "italic", "text-anchor": "middle" }, spec.operator));
+    const logo = spec.operator === "renfe" ? "renfe" : spec.operator;
+    parts.push(
+      tag("rect", { x: 62, y: 105, width: 76, height: 28, rx: 14, fill: spec.badge }),
+      tag("text", { x: 100, y: 123, fill: "#FFFFFF", "font-size": spec.operator === "OUIGO" ? 10 : 14, "font-family": "Arial, sans-serif", "font-weight": 700, "font-style": "italic", "text-anchor": "middle" }, logo),
+    );
   }
   parts.push(
     tag("rect", { x: 20, y: 153, width: 20, height: 10, rx: 5, fill: spec.light, stroke: "#FFFFFF", "stroke-width": 2 }),
